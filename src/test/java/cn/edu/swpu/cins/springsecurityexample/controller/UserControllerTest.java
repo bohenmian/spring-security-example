@@ -30,7 +30,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getUser() throws Exception {
+    public void test_getUser_success() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/user")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -38,4 +38,11 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1));
     }
 
+    @Test
+    public void test_getUserInfo_success() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/1")
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(MockMvcResultMatchers.status().is(200))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username").value("bohenmian"));
+    }
 }
