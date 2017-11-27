@@ -2,6 +2,8 @@ package cn.edu.swpu.cins.springsecurityexample.controller;
 
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
 import cn.edu.swpu.cins.springsecurityexample.service.UserService;
+import com.alibaba.fastjson.JSON;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,4 +71,16 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
     }
 
+    @Test
+    public void test_when_createUser_success() throws Exception {
+        User user = new User();
+        user.setId(Long.valueOf(3));
+        user.setUsername("Jackson");
+        user.setPassword("12345678");
+        String requestJson = JSON.toJSONString(user);
+        mockMvc.perform(MockMvcRequestBuilders.post("/user")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(requestJson))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }
