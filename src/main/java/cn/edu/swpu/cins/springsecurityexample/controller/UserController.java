@@ -1,8 +1,11 @@
 package cn.edu.swpu.cins.springsecurityexample.controller;
 
+import cn.edu.swpu.cins.springsecurityexample.exception.UserNotExistException;
+import cn.edu.swpu.cins.springsecurityexample.model.http.Message;
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
 import cn.edu.swpu.cins.springsecurityexample.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,4 +36,9 @@ public class UserController {
         return userService.addUser(user);
     }
 
+    @ExceptionHandler(UserNotExistException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Message handleNotFoundException(UserNotExistException exception) {
+        return new Message(exception.getMessage());
+    }
 }

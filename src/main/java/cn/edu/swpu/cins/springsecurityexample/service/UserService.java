@@ -11,4 +11,5 @@ public interface UserService {
     User getUserInfo(Long id);
 
     User addUser(User user);
+
 }

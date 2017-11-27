@@ -1,5 +1,6 @@
 package cn.edu.swpu.cins.springsecurityexample.service.impl;
 
+import cn.edu.swpu.cins.springsecurityexample.exception.UserNotExistException;
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
 import cn.edu.swpu.cins.springsecurityexample.repository.UserRepository;
 import cn.edu.swpu.cins.springsecurityexample.service.UserService;
@@ -25,11 +26,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserInfo(Long id) {
-        return userRepository.getUserById(id);
+        User user = userRepository.getUserById(id);
+        if (user == null) {
+            throw new UserNotExistException();
+        }
+        return user;
     }
 
     @Override
     public User addUser(User user) {
         return userRepository.save(user);
     }
+
 }
