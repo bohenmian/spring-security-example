@@ -3,13 +3,12 @@ package cn.edu.swpu.cins.springsecurityexample.controller;
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
 import cn.edu.swpu.cins.springsecurityexample.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     private UserService userService;
@@ -19,13 +18,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user")
+    @GetMapping
     public List<User> getUser() {
         return userService.getUser();
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id:\\d+}")
     public User getUserInfo(@PathVariable("id") Long id) {
         return userService.getUserInfo(id);
     }
+
+    @PostMapping
+    public User addUser(@RequestBody User user) {
+        return userService.addUser(user);
+    }
+
 }
