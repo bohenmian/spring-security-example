@@ -3,7 +3,6 @@ package cn.edu.swpu.cins.springsecurityexample.controller;
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
 import cn.edu.swpu.cins.springsecurityexample.service.UserService;
 import com.alibaba.fastjson.JSON;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

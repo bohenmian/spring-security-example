@@ -1,6 +1,9 @@
 package cn.edu.swpu.cins.springsecurityexample.service.impl;
 
+import cn.edu.swpu.cins.springsecurityexample.enums.SignInResultEnum;
+import cn.edu.swpu.cins.springsecurityexample.exception.MissParamException;
 import cn.edu.swpu.cins.springsecurityexample.exception.UserNotExistException;
+import cn.edu.swpu.cins.springsecurityexample.model.http.SignInUser;
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
 import cn.edu.swpu.cins.springsecurityexample.repository.UserRepository;
 import cn.edu.swpu.cins.springsecurityexample.service.UserService;
@@ -38,4 +41,30 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public SignInResultEnum signIn(SignInUser signUser) {
+        if (signUser == null || signUser.getUsername() == null || signUser.getPassword() == null) {
+            throw new MissParamException();
+        }
+        User user = this.loadUserByname(signUser.getUsername());
+        boolean result = this.checkPassword(signUser.getPassword(), user.getPassword());
+        //TODO
+        return null;
+    }
+
+
+    private User loadUserByname(String username) {
+        User user = userRepository.getUserByUsername(username);
+        if (user == null) {
+            throw new UserNotExistException();
+        }
+        return user;
+    }
+
+    private boolean checkPassword(String loginPassword, String savedPassword) {
+        if (loginPassword.equals(savedPassword)) {
+            return true;
+        }
+        return false;
+    }
 }
