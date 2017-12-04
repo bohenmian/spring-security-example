@@ -10,6 +10,14 @@ public class ExampleException extends RuntimeException {
         this.httpStatus = httpStatus;
     }
 
+    public ExampleException() {
+        super();
+    }
+
+    public ExampleException(String message) {
+        super(message);
+    }
+
     @Override
     public String toString() {
         return "ExampleException{" +
