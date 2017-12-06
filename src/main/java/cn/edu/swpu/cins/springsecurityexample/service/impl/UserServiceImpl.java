@@ -46,14 +46,17 @@ public class UserServiceImpl implements UserService {
         if (signUser == null || signUser.getUsername() == null || signUser.getPassword() == null) {
             throw new MissParamException();
         }
-        User user = this.loadUserByname(signUser.getUsername());
+        User user = this.loadUserByName(signUser.getUsername());
         boolean result = this.checkPassword(signUser.getPassword(), user.getPassword());
-        //TODO
-        return null;
+        if (result) {
+            return SignInResultEnum.LOGIN_SUCCESS;
+        } else {
+            return SignInResultEnum.USERNAME_PASSWORD_NOT_MATCH;
+        }
     }
 
 
-    private User loadUserByname(String username) {
+    private User loadUserByName(String username) {
         User user = userRepository.getUserByUsername(username);
         if (user == null) {
             throw new UserNotExistException();
