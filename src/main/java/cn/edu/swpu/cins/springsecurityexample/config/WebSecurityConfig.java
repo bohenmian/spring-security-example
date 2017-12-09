@@ -19,9 +19,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .formLogin()
+                .loginPage("/signIn.html")
+                .loginProcessingUrl("/authentication/form")
                 .and()
                 .authorizeRequests()
+                .antMatchers("/signIn.html")
+                .permitAll()
                 .anyRequest()
                 .authenticated();
+
     }
 }
