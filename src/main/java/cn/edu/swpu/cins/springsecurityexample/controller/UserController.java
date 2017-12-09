@@ -3,7 +3,6 @@ package cn.edu.swpu.cins.springsecurityexample.controller;
 import cn.edu.swpu.cins.springsecurityexample.enums.SignInResultEnum;
 import cn.edu.swpu.cins.springsecurityexample.exception.MissParamException;
 import cn.edu.swpu.cins.springsecurityexample.exception.UserNotExistException;
-import cn.edu.swpu.cins.springsecurityexample.model.http.HttpResult;
 import cn.edu.swpu.cins.springsecurityexample.model.http.Message;
 import cn.edu.swpu.cins.springsecurityexample.model.http.SignInUser;
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
