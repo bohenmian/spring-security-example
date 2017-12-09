@@ -7,3 +7,7 @@ spring:
     url: jdbc:mysql://localhost/test
     username: root
     password: 128000
+demo:
+  security:
+    browser:
+      loginPage: /demo-signIn.html
