@@ -32,7 +32,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        if (StringUtils.equals("/authentication/require", request.getRequestURI()) && StringUtils.equalsIgnoreCase(request.getMethod(), "post")) {
+        if (StringUtils.equals("/authentication/form", request.getRequestURI()) && StringUtils.equalsIgnoreCase(request.getMethod(), "post")) {
             try {
                 validate(new ServletWebRequest(request));
             } catch (ValidateCodeException e) {
@@ -52,7 +52,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         if (codeInSession == null) {
             throw new ValidateCodeException("验证码不存在");
         }
-        if (codeInSession.isExpried()) {
+        if (codeInSession.isExpired()) {
             sessionStrategy.removeAttribute(request, SESSION_KEY);
             throw new ValidateCodeException("验证码已过期");
         }
@@ -60,10 +60,6 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
             throw new ValidateCodeException("验证码不匹配");
         }
         sessionStrategy.removeAttribute(request, SESSION_KEY);
-    }
-
-    public static String getSessionKey() {
-        return SESSION_KEY;
     }
 
     public SessionStrategy getSessionStrategy() {
