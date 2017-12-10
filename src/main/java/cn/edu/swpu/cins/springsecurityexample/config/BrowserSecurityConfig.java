@@ -1,5 +1,6 @@
 package cn.edu.swpu.cins.springsecurityexample.config;
 
+import cn.edu.swpu.cins.springsecurityexample.authentication.MyAuthenticationSuccessHandler;
 import cn.edu.swpu.cins.springsecurityexample.config.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,10 +14,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private SecurityProperties securityProperties;
+    private MyAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Autowired
-    public BrowserSecurityConfig(SecurityProperties securityProperties) {
+    public BrowserSecurityConfig(SecurityProperties securityProperties, MyAuthenticationSuccessHandler authenticationSuccessHandler) {
         this.securityProperties = securityProperties;
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
     }
 
     @Bean
@@ -30,6 +33,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/authentication/require")
                 .loginProcessingUrl("/authentication/form")
+                .successHandler(authenticationSuccessHandler)
                 .and()
                 .authorizeRequests()
                 .antMatchers("/authentication/require", securityProperties.getBrowserProperties().getLoginPage())
