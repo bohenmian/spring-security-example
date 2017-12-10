@@ -6,12 +6,21 @@ import cn.edu.swpu.cins.springsecurityexample.exception.UserNotExistException;
 import cn.edu.swpu.cins.springsecurityexample.model.http.Message;
 import cn.edu.swpu.cins.springsecurityexample.model.http.SignInUser;
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
+import cn.edu.swpu.cins.springsecurityexample.model.service.ImageCode;
+import cn.edu.swpu.cins.springsecurityexample.service.ImageCodeService;
 import cn.edu.swpu.cins.springsecurityexample.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.social.connect.web.HttpSessionSessionStrategy;
+import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 import static cn.edu.swpu.cins.springsecurityexample.enums.SignInResultEnum.*;
@@ -20,10 +29,15 @@ import static cn.edu.swpu.cins.springsecurityexample.enums.SignInResultEnum.*;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
+
     private UserService userService;
+    private ImageCodeService imageCodeService;
+    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ImageCodeService imageCodeService) {
+        this.imageCodeService = imageCodeService;
         this.userService = userService;
     }
 
@@ -50,6 +64,14 @@ public class UserController {
         }
         return new ResponseEntity<>(new Message(signInResultEnum.getMsg()), HttpStatus.FORBIDDEN);
     }
+
+    @GetMapping("/code/image")
+    public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ImageCode imageCode = imageCodeService.createImageCode(request);
+        sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY, imageCode);
+        ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
+    }
+
     @ExceptionHandler(UserNotExistException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public Message handleNotFoundException() {
