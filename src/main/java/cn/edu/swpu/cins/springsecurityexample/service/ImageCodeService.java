@@ -1,10 +1,12 @@
 package cn.edu.swpu.cins.springsecurityexample.service;
 
-import cn.edu.swpu.cins.springsecurityexample.model.service.ImageCode;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public interface ImageCodeService {
 
-    ImageCode createImageCode(HttpServletRequest request);
+    void createImageCode(HttpServletRequest request, HttpServletResponse response) throws IOException;
+
 }

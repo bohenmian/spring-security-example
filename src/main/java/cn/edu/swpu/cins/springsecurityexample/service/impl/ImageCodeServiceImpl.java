@@ -2,18 +2,28 @@ package cn.edu.swpu.cins.springsecurityexample.service.impl;
 
 import cn.edu.swpu.cins.springsecurityexample.model.service.ImageCode;
 import cn.edu.swpu.cins.springsecurityexample.service.ImageCodeService;
+import org.springframework.social.connect.web.HttpSessionSessionStrategy;
+import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.ServletWebRequest;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Random;
 
 @Service
 public class ImageCodeServiceImpl implements ImageCodeService {
 
+    private static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
+
+    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+
     @Override
-    public ImageCode createImageCode(HttpServletRequest request) {
+    public void createImageCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int width = 67;
         int height = 23;
 
@@ -40,7 +50,9 @@ public class ImageCodeServiceImpl implements ImageCodeService {
             graphics.drawString(rand, 13 * i + 6, 16);
         }
         graphics.dispose();
-        return new ImageCode(image, sRand, 60);
+        ImageCode imageCode = new ImageCode(image, sRand, 60);
+        sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY, imageCode);
+        ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
 
     private Color getRandColor(int fc, int bc) {

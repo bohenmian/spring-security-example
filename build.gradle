@@ -31,8 +31,11 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('com.alibaba:fastjson:1.2.41')
+	compile('org.apache.commons:commons-lang3:3.6')
+	compile('org.springframework.social:spring-social-core')
+	compile('org.springframework.social:spring-social-web')
 	compile('org.springframework.boot:spring-boot-configuration-processor')
+	compile('com.alibaba:fastjson:1.2.41')
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile "com.github.tomakehurst:wiremock:2.12.0"
