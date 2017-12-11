@@ -11,7 +11,3 @@ demo:
   security:
     browser:
       loginPage: /demo-signIn.html
-    code:
-      image:
-        width: 82
-        length: 6
