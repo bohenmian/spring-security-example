@@ -1,10 +1,10 @@
 package cn.edu.swpu.cins.springsecurityexample.config.filter;
 
+import cn.edu.swpu.cins.springsecurityexample.authentication.MyAuthenticationFailureHandler;
 import cn.edu.swpu.cins.springsecurityexample.exception.ValidateCodeException;
 import cn.edu.swpu.cins.springsecurityexample.model.service.ImageCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
     @Autowired
-    private AuthenticationFailureHandler authenticationFailureHandler;
+    private MyAuthenticationFailureHandler authenticationFailureHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -62,19 +62,11 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
         sessionStrategy.removeAttribute(request, SESSION_KEY);
     }
 
-    public SessionStrategy getSessionStrategy() {
-        return sessionStrategy;
-    }
-
-    public void setSessionStrategy(SessionStrategy sessionStrategy) {
-        this.sessionStrategy = sessionStrategy;
-    }
-
-    public AuthenticationFailureHandler getAuthenticationFailureHandler() {
+    public MyAuthenticationFailureHandler getAuthenticationFailureHandler() {
         return authenticationFailureHandler;
     }
 
-    public void setAuthenticationFailureHandler(AuthenticationFailureHandler authenticationFailureHandler) {
+    public void setAuthenticationFailureHandler(MyAuthenticationFailureHandler authenticationFailureHandler) {
         this.authenticationFailureHandler = authenticationFailureHandler;
     }
 }
