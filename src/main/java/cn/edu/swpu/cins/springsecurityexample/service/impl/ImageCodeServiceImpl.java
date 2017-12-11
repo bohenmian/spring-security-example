@@ -1,10 +1,13 @@
 package cn.edu.swpu.cins.springsecurityexample.service.impl;
 
+import cn.edu.swpu.cins.springsecurityexample.config.properties.SecurityProperties;
 import cn.edu.swpu.cins.springsecurityexample.model.service.ImageCode;
 import cn.edu.swpu.cins.springsecurityexample.service.ImageCodeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.imageio.ImageIO;
@@ -22,10 +25,17 @@ public class ImageCodeServiceImpl implements ImageCodeService {
 
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
 
+    private SecurityProperties securityProperties;
+
+    @Autowired
+    public ImageCodeServiceImpl(SecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
+    }
+
     @Override
     public void createImageCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int width = 67;
-        int height = 23;
+        int width = ServletRequestUtils.getIntParameter(new ServletWebRequest(request).getRequest(), "width", securityProperties.getCode().getImage().getWidth());
+        int height = ServletRequestUtils.getIntParameter(new ServletWebRequest(request).getRequest(), "height", securityProperties.getCode().getImage().getHeight());
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = image.getGraphics();
@@ -43,14 +53,14 @@ public class ImageCodeServiceImpl implements ImageCodeService {
             graphics.drawLine(x, y, x + x1, y + y1);
         }
         String sRand = "";
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < securityProperties.getCode().getImage().getLength(); i++) {
             String rand = String.valueOf(random.nextInt(10));
             sRand += rand;
             graphics.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
             graphics.drawString(rand, 13 * i + 6, 16);
         }
         graphics.dispose();
-        ImageCode imageCode = new ImageCode(image, sRand, 60);
+        ImageCode imageCode = new ImageCode(image, sRand, securityProperties.getCode().getImage().getExpireIn());
         sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY, imageCode);
         ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
