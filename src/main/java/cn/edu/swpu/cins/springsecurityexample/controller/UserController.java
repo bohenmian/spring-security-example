@@ -6,7 +6,7 @@ import cn.edu.swpu.cins.springsecurityexample.exception.UserNotExistException;
 import cn.edu.swpu.cins.springsecurityexample.model.http.Message;
 import cn.edu.swpu.cins.springsecurityexample.model.http.SignInUser;
 import cn.edu.swpu.cins.springsecurityexample.model.persistence.User;
-import cn.edu.swpu.cins.springsecurityexample.service.ImageCodeService;
+import cn.edu.swpu.cins.springsecurityexample.service.ValidateCodeService;
 import cn.edu.swpu.cins.springsecurityexample.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,12 +28,11 @@ public class UserController {
 
 
     private UserService userService;
-    private ImageCodeService imageCodeService;
-    private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+    private ValidateCodeService validateCodeService;
 
     @Autowired
-    public UserController(UserService userService, ImageCodeService imageCodeService) {
-        this.imageCodeService = imageCodeService;
+    public UserController(UserService userService, ValidateCodeService validateCodeService) {
+        this.validateCodeService = validateCodeService;
         this.userService = userService;
     }
 
@@ -62,8 +61,8 @@ public class UserController {
     }
 
     @GetMapping("/code/image")
-    public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        imageCodeService.createImageCode(request, response);
+    public void createImageCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        validateCodeService.createImageCode(request, response);
     }
 
     @ExceptionHandler(UserNotExistException.class)

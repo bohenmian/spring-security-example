@@ -3,7 +3,6 @@ package cn.edu.swpu.cins.springsecurityexample.config;
 import cn.edu.swpu.cins.springsecurityexample.authentication.MyAuthenticationFailureHandler;
 import cn.edu.swpu.cins.springsecurityexample.authentication.MyAuthenticationSuccessHandler;
 import cn.edu.swpu.cins.springsecurityexample.config.filter.ValidateCodeFilter;
-import cn.edu.swpu.cins.springsecurityexample.config.properties.BrowserProperties;
 import cn.edu.swpu.cins.springsecurityexample.config.properties.SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -46,25 +45,24 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public ValidateCodeFilter validateCodeFilterBeam() {
+    public ValidateCodeFilter validateCodeFilterBean() {
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         validateCodeFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
         return new ValidateCodeFilter();
     }
 
-    //TODO add update token expireTime by login
     @Bean
     public PersistentTokenRepository persistentTokenRepositoryBean() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
-//        //设置启动时是否创建表
+//        //设置启动时是否创建表,如果表已经存在会抛出异常
 //        tokenRepository.setCreateTableOnStartup(true);
         return tokenRepository;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(validateCodeFilterBeam(), UsernamePasswordAuthenticationFilter.class)
+        http.addFilterBefore(validateCodeFilterBean(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
                 .formLogin()
                 .loginPage("/authentication/require")

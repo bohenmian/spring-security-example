@@ -2,7 +2,7 @@ package cn.edu.swpu.cins.springsecurityexample.service.impl;
 
 import cn.edu.swpu.cins.springsecurityexample.config.properties.SecurityProperties;
 import cn.edu.swpu.cins.springsecurityexample.model.service.ImageCode;
-import cn.edu.swpu.cins.springsecurityexample.service.ImageCodeService;
+import cn.edu.swpu.cins.springsecurityexample.service.ValidateCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Random;
 
 @Service
-public class ImageCodeServiceImpl implements ImageCodeService {
+public class ValidateCodeServiceImpl implements ValidateCodeService {
 
     private static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
 
@@ -28,7 +28,7 @@ public class ImageCodeServiceImpl implements ImageCodeService {
     private SecurityProperties securityProperties;
 
     @Autowired
-    public ImageCodeServiceImpl(SecurityProperties securityProperties) {
+    public ValidateCodeServiceImpl(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
     }
 
