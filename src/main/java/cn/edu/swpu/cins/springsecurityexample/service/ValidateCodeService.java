@@ -9,5 +9,4 @@ public interface ValidateCodeService {
 
     void createImageCode(HttpServletRequest request, HttpServletResponse response) throws IOException;
 
-
 }
