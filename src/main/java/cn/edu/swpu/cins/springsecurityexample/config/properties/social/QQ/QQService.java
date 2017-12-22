@@ -1,4 +1,4 @@
-package cn.edu.swpu.cins.springsecurityexample.config.properties.QQ;
+package cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ;
 
 import cn.edu.swpu.cins.springsecurityexample.model.service.QQUserInfo;
 

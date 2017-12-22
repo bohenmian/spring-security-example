@@ -35,6 +35,8 @@ dependencies {
 	compile("org.springframework.security.oauth:spring-security-oauth2")
 	compile('org.springframework.social:spring-social-core')
 	compile('org.springframework.social:spring-social-web')
+	compile('org.springframework.social:spring-social-config')
+	compile('org.springframework.social:spring-social-security')
 	compile('org.springframework.boot:spring-boot-configuration-processor')
 	compile('com.alibaba:fastjson:1.2.41')
 	runtime('mysql:mysql-connector-java')
