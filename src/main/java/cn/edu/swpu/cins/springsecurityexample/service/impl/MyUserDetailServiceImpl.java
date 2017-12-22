@@ -10,10 +10,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyUserDetailServiceImpl implements UserDetailsService {
+public class MyUserDetailServiceImpl implements UserDetailsService, SocialUserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(MyUserDetailServiceImpl.class);
 
@@ -26,8 +29,17 @@ public class MyUserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("登录认证");
-        return new User(username, passwordService.encode("123456"), true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        log.info("表单登录用户名:" + username);
+        return buildUser(username);
     }
 
+    @Override
+    public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+        log.info("登录Id" + userId);
+        return buildUser(userId);
+    }
+
+    private SocialUser buildUser(String username) {
+        return new SocialUser(username, passwordService.encode("123456"), true, true, true, true, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+    }
 }

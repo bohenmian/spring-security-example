@@ -1,7 +1,7 @@
-package cn.edu.swpu.cins.springsecurityexample.config.properties.QQ.impl;
+package cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ.impl;
 
 import cn.edu.swpu.cins.springsecurityexample.model.service.QQUserInfo;
-import cn.edu.swpu.cins.springsecurityexample.config.properties.QQ.QQService;
+import cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ.QQService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.social.oauth2.AbstractOAuth2ApiBinding;
@@ -21,25 +21,20 @@ public class QQServiceImpl extends AbstractOAuth2ApiBinding implements QQService
 
     private String openId;
 
-    //Json转换成对象
+    //String转换为对象
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public QQServiceImpl(String accessToken, String appId) {
+        //会自动将AccessToken作为查询参数
         super(accessToken, TokenStrategy.ACCESS_TOKEN_PARAMETER);
         this.appId = appId;
-        //对OpenId的路径进行拼接
+        //对openId的路径进行拼接
         String url = String.format(URL_GET_OPENID, accessToken);
         String result = getRestTemplate().getForObject(url, String.class);
         System.out.println(result);
         this.openId = StringUtils.substringBetween(result, "\"openid\":", "}");
     }
 
-
-    /**
-     * 返回从QQ服务器得到的用户信息
-     * @return QQUserInfo
-     * @throws IOException
-     */
     @Override
     public QQUserInfo getUserInfo() throws IOException {
         String url = String.format(URL_GET_USERINFO, appId, openId);
