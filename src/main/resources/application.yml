@@ -1,6 +1,7 @@
 security:
   basic:
     enabled: false
+
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -11,3 +12,15 @@ demo:
   security:
     browser:
       loginPage: /demo-signIn.html
+    code:
+      image:
+        width: 67
+        height: 23
+        length: 4
+        expireIn: 60
+        url: /user,/user/*
+    social:
+      qq:
+        app-id: ""
+        app-secret: ""
+        providerId: callback.do
