@@ -15,7 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
+import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 @Configuration
@@ -26,17 +28,19 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     private MyAuthenticationFailureHandler authenticationFailureHandler;
     private DataSource dataSource;
     private UserDetailsService userDetailsService;
+    private SpringSocialConfigurer springSocialConfigurer;
 
     @SuppressWarnings("SpringJavaAutowiringinspect")
     @Autowired
     public BrowserSecurityConfig(SecurityProperties securityProperties, MyAuthenticationSuccessHandler authenticationSuccessHandler,
                                  MyAuthenticationFailureHandler authenticationFailureHandler, DataSource dataSource,
-                                 UserDetailsService userDetailsService) {
+                                 UserDetailsService userDetailsService, SpringSocialConfigurer springSocialConfigurer) {
         this.securityProperties = securityProperties;
         this.authenticationSuccessHandler = authenticationSuccessHandler;
         this.authenticationFailureHandler = authenticationFailureHandler;
         this.dataSource = dataSource;
         this.userDetailsService = userDetailsService;
+        this.springSocialConfigurer = springSocialConfigurer;
     }
 
     @Bean
@@ -45,10 +49,12 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public ValidateCodeFilter validateCodeFilterBean() {
+    public ValidateCodeFilter validateCodeFilterBean() throws ServletException {
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         validateCodeFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
-        return new ValidateCodeFilter();
+        validateCodeFilter.setSecurityProperties(securityProperties);
+        validateCodeFilter.afterPropertiesSet();
+        return validateCodeFilter;
     }
 
     @Bean
@@ -62,6 +68,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.addFilterBefore(validateCodeFilterBean(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
                 .formLogin()
@@ -76,7 +83,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailsService)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/authentication/require", securityProperties.getBrowserProperties().getLoginPage(), "/user/code/image")
+                .antMatchers("/authentication/require", securityProperties.getBrowserProperties().getLoginPage(), "/user/code/*")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
