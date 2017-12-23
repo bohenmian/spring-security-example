@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
+
 public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
 
     private static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
@@ -35,6 +35,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 
     @Autowired
     private MyAuthenticationFailureHandler authenticationFailureHandler;
+
 
     @Override
     public void afterPropertiesSet() throws ServletException {
@@ -99,5 +100,13 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 
     public void setSecurityProperties(SecurityProperties securityProperties) {
         this.securityProperties = securityProperties;
+    }
+
+    public Set<String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(Set<String> urls) {
+        this.urls = urls;
     }
 }
