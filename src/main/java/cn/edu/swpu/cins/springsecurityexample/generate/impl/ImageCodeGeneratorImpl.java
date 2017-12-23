@@ -3,7 +3,7 @@ package cn.edu.swpu.cins.springsecurityexample.generate.impl;
 import cn.edu.swpu.cins.springsecurityexample.config.properties.SecurityProperties;
 import cn.edu.swpu.cins.springsecurityexample.generate.ValidateCodeGenerator;
 import cn.edu.swpu.cins.springsecurityexample.model.service.ImageCode;
-import org.springframework.stereotype.Component;
+import cn.edu.swpu.cins.springsecurityexample.model.service.ValidateCode;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -17,7 +17,7 @@ public class ImageCodeGeneratorImpl implements ValidateCodeGenerator {
     private SecurityProperties securityProperties;
 
     @Override
-    public ImageCode generate(ServletWebRequest request) throws IOException {
+    public ValidateCode generate(ServletWebRequest request) throws IOException {
         int width = ServletRequestUtils.getIntParameter(request.getRequest(), "width",
                 securityProperties.getCode().getImage().getWidth());
         int height = ServletRequestUtils.getIntParameter(request.getRequest(), "height",
