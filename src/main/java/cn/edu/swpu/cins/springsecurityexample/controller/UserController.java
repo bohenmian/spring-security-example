@@ -1,5 +1,6 @@
 package cn.edu.swpu.cins.springsecurityexample.controller;
 
+import cn.edu.swpu.cins.springsecurityexample.config.holder.ValidateCodeProcessorHolder;
 import cn.edu.swpu.cins.springsecurityexample.config.processor.ValidateCodeProcessor;
 import cn.edu.swpu.cins.springsecurityexample.enums.SignInResultEnum;
 import cn.edu.swpu.cins.springsecurityexample.exception.MissParamException;
@@ -26,13 +27,13 @@ import static cn.edu.swpu.cins.springsecurityexample.enums.SignInResultEnum.*;
 public class UserController {
 
     private UserService userService;
-    private Map<String, ValidateCodeProcessor> validateCodeProcessorHolderMap;
+    private ValidateCodeProcessorHolder validateCodeProcessorHolder;
 
 
     @Autowired
-    public UserController(UserService userService, Map<String, ValidateCodeProcessor> validateCodeProcessorHolderMap) {
+    public UserController(UserService userService, ValidateCodeProcessorHolder validateCodeProcessorHolder) {
         this.userService = userService;
-        this.validateCodeProcessorHolderMap = validateCodeProcessorHolderMap;
+        this.validateCodeProcessorHolder = validateCodeProcessorHolder;
     }
 
     @GetMapping
@@ -61,7 +62,7 @@ public class UserController {
 
     @GetMapping("/code/{type}")
     public void createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable("type") String type) throws Exception {
-        validateCodeProcessorHolderMap.get(type + "CodeProcessor").create(new ServletWebRequest(request, response));
+        validateCodeProcessorHolder.findValidateCodeProcessor(type).create(new ServletWebRequest(request, response));
     }
 
 
