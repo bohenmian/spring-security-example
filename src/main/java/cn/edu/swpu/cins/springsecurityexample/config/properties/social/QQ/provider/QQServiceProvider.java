@@ -1,10 +1,10 @@
 package cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ.provider;
 
 
+import cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ.QQAuth2Template;
 import cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ.QQService;
 import cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ.impl.QQServiceImpl;
 import org.springframework.social.oauth2.AbstractOAuth2ServiceProvider;
-import org.springframework.social.oauth2.OAuth2Template;
 
 public class QQServiceProvider extends AbstractOAuth2ServiceProvider<QQService> {
 
@@ -17,7 +17,7 @@ public class QQServiceProvider extends AbstractOAuth2ServiceProvider<QQService> 
     private String appId;
 
     public QQServiceProvider(String appId, String appSecret) {
-        super(new OAuth2Template(appId, appSecret, URL_AUTHORIZE, URL_ACCESS_TOKEN));
+        super(new QQAuth2Template(appId, appSecret, URL_AUTHORIZE, URL_ACCESS_TOKEN));
     }
 
     @Override

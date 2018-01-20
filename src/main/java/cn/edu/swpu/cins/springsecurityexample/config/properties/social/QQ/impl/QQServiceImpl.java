@@ -31,15 +31,20 @@ public class QQServiceImpl extends AbstractOAuth2ApiBinding implements QQService
         //对openId的路径进行拼接
         String url = String.format(URL_GET_OPENID, accessToken);
         String result = getRestTemplate().getForObject(url, String.class);
-        System.out.println(result);
-        this.openId = StringUtils.substringBetween(result, "\"openid\":", "}");
+        this.openId = StringUtils.substringBetween(result, "\"openid\":\"", "\"}");
     }
 
     @Override
     public QQUserInfo getUserInfo() throws IOException {
         String url = String.format(URL_GET_USERINFO, appId, openId);
         String result = getRestTemplate().getForObject(url, String.class);
-        System.out.println(result);
-        return objectMapper.readValue(result, QQUserInfo.class);
+        QQUserInfo userInfo = null;
+        try {
+            userInfo = objectMapper.readValue(result, QQUserInfo.class);
+            userInfo.setOpenId(openId);
+            return userInfo;
+        } catch (Exception e) {
+            throw new RuntimeException("获取用户信息失败");
+        }
     }
 }
