@@ -4,20 +4,21 @@ security:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost/test
+    url: jdbc:mysql://localhost/security
     username: root
-    password: 128000
+    password: root
 demo:
   security:
     browser:
-      loginPage: /demo-signIn.html
+#      loginPage: /demo-signIn.html
+      loginPage: signIn.html
     code:
       image:
         width: 67
         height: 23
         length: 4
         expireIn: 60
-        url: /user,/user/*
+        url: /user,/user/*  #需要验证码的的接口
     social:
       filterProcessesUrl: /login
       qq:

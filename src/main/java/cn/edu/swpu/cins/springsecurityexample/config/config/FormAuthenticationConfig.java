@@ -17,11 +17,10 @@ public class FormAuthenticationConfig {
     public void configure(HttpSecurity http) throws Exception {
         http.formLogin()
                 .loginPage("/authentication/require")
-                .loginProcessingUrl("/authentication/form")
+                .loginProcessingUrl("/user/signIn")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler);
     }
-
 }
 
 

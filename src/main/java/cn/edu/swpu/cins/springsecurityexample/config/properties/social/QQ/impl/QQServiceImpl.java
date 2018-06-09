@@ -9,6 +9,7 @@ import org.springframework.social.oauth2.TokenStrategy;
 
 import java.io.IOException;
 
+//因为每个用户授权登录的时候都会生成一个实例,所以不能将其申明为一个Bean
 public class QQServiceImpl extends AbstractOAuth2ApiBinding implements QQService {
 
     //请求认证服务器获取OpenId的路径
@@ -25,7 +26,7 @@ public class QQServiceImpl extends AbstractOAuth2ApiBinding implements QQService
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public QQServiceImpl(String accessToken, String appId) {
-        //会自动将AccessToken作为查询参数
+        //会自动将AccessToken作为查询参数,注意此处要调用两个参数的构造方法,因为一个参数的构造方法是将accessToken方法请求头不,而QQ要求的是方法请求体中
         super(accessToken, TokenStrategy.ACCESS_TOKEN_PARAMETER);
         this.appId = appId;
         //对openId的路径进行拼接

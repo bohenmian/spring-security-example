@@ -46,16 +46,18 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public PersistentTokenRepository persistentTokenRepositoryBean() {
+        public PersistentTokenRepository persistentTokenRepositoryBean() {
+        //此处可以自定义实现逻辑,可以将用户的token放入redis,每次登录通过获取redis中的token是否过来来判断用户是否需要输入密码
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
         tokenRepository.setDataSource(dataSource);
 //        //设置启动时是否创建表,如果表已经存在会抛出异常
-//        tokenRepository.setCreateTableOnStartup(true);
+//        tokenRepository.setCreateTableOnStartup(true);N
         return tokenRepository;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //配置表单的登录配置
         formAuthenticationConfig.configure(http);
 
         http.apply(validateCodeSecurityConfig)
@@ -65,11 +67,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .rememberMe()
                 .tokenRepository(persistentTokenRepositoryBean())
-                .tokenValiditySeconds(securityProperties.getBrowserProperties().getRememberMe())
+                .tokenValiditySeconds(securityProperties.getBrowser().getRememberMe())
                 .userDetailsService(userDetailsService)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/authentication/require", securityProperties.getBrowserProperties().getLoginPage(), "/user/code/*")
+                .antMatchers("/signIn.html", securityProperties.getBrowser().getLoginPage(), "/user/code/*")
                 .permitAll()
                 .anyRequest()
                 .authenticated();

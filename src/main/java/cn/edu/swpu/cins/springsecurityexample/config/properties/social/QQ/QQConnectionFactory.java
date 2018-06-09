@@ -4,6 +4,7 @@ import cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ.adapte
 import cn.edu.swpu.cins.springsecurityexample.config.properties.social.QQ.provider.QQServiceProvider;
 import org.springframework.social.connect.support.OAuth2ConnectionFactory;
 
+//ConnectionFactory需要QQServiceProvider和QQAdapter
 public class QQConnectionFactory extends OAuth2ConnectionFactory<QQService> {
 
     public QQConnectionFactory(String providerId, String appId, String appSecret) {

@@ -29,6 +29,7 @@ public class MyUserDetailServiceImpl implements UserDetailsService, SocialUserDe
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        // TODO: 18-5-30 find user from database and match it, and authenticate it authentication
         log.info("表单登录用户名:" + username);
         return buildUser(username);
     }

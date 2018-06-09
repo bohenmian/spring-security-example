@@ -17,6 +17,7 @@ import java.util.Map;
 
 public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> implements ValidateCodeProcessor {
 
+    //依赖查找,spring容器启动时会去收集ValidateCodeGenerator的实现
     @Autowired
     private Map<String, ValidateCodeGenerator> validateCodeGeneratorMap;
 

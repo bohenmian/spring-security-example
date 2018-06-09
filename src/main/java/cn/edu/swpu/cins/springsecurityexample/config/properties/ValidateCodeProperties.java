@@ -3,6 +3,7 @@ package cn.edu.swpu.cins.springsecurityexample.config.properties;
 
 public class ValidateCodeProperties {
 
+    //应用级配置
     private ImageCodeProperties image = new ImageCodeProperties();
 
     private SmsCodeProperties sms = new SmsCodeProperties();

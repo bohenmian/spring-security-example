@@ -30,14 +30,14 @@ public class SocialConfig extends SocialConfigurerAdapter {
 
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
-        JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
-        return repository;
+        return new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
     }
 
     @Bean
     public SpringSocialConfigurer springSocialConfigurerBean() {
+        //传入自己定义的拦截路径
+        //TODO QQ的回调地址默认为80端口,需要将应用的端口改为80
         String filterProcessesUrl = securityProperties.getSocial().getFilterProcessesUrl();
-        MySpringSocialConfigurer configurer = new MySpringSocialConfigurer(filterProcessesUrl);
-        return configurer;
+        return new MySpringSocialConfigurer(filterProcessesUrl);
     }
 }

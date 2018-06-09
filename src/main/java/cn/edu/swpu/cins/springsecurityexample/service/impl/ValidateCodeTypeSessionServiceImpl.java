@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 
 @Component
-public class ValideCodeTypeSessionServiceImpl implements ValidateCodeService {
+public class ValidateCodeTypeSessionServiceImpl implements ValidateCodeService {
 
     private String SESSION_KEY_PREFIX = "SESSION_KEY_FOR_CODE_";
     private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();

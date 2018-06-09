@@ -10,6 +10,7 @@ public class ValidateCode {
 
     public ValidateCode(String code, int expireIn) {
         this.code = code;
+        //设置现在的时间加上验证码有效时间构成过期时间
         this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
     }
 
@@ -19,6 +20,7 @@ public class ValidateCode {
     }
 
     public boolean isExpired() {
+        //比对过期时间是否在现在时候之后
         return LocalDateTime.now().isAfter(expireTime);
     }
 

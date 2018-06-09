@@ -18,6 +18,7 @@ public class ImageCodeGeneratorImpl implements ValidateCodeGenerator {
 
     @Override
     public ValidateCode generate(ServletWebRequest request) throws IOException {
+        //从请求中获取是否存在验证码的配置参数
         int width = ServletRequestUtils.getIntParameter(request.getRequest(), "width",
                 securityProperties.getCode().getImage().getWidth());
         int height = ServletRequestUtils.getIntParameter(request.getRequest(), "height",

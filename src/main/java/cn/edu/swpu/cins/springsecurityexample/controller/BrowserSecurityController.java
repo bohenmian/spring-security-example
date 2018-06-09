@@ -43,7 +43,7 @@ public class BrowserSecurityController {
             String target = savedRequest.getRedirectUrl();
             logger.info("引发跳转的请求是：" + target);
             if (StringUtils.endsWithIgnoreCase(target, ".html")) {
-                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowserProperties().getLoginPage());
+                redirectStrategy.sendRedirect(request, response, securityProperties.getBrowser().getLoginPage());
             }
         }
         return new Message("没有权限,请登录");

@@ -32,14 +32,24 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     private ValidateCodeProcessorHolder validateCodeProcessorHolder;
     @Autowired
     private SecurityProperties securityProperties;
+    //依赖查找,在系统启动的时候在容器中查找相应的处理器
     private Map<String, ValidateCodeType> urlMap = new HashMap<>();
     private AntPathMatcher pathMatcher = new AntPathMatcher();
 
+
+    /**
+     * 从application.yml中拿出需要验证码的路径
+     *
+     * @throws ServletException
+     */
     @Override
     public void afterPropertiesSet() throws ServletException {
         super.afterPropertiesSet();
+        //设置需要图形验证码的默认路径
         urlMap.put(SecurityContants.DEFAULT_SIGN_IN_PROCESSING_URL_FORM, ValidateCodeType.IMAGE);
+        //此处securityProperties配置的是application.yml中的配置的需要验证码的路径,此路径可能是一个集合
         addUrlToMap(securityProperties.getCode().getImage().getUrl(), ValidateCodeType.IMAGE);
+        //设置需要手机验证码的默认路径
         urlMap.put(SecurityContants.DEFAULT_SIGN_IN_PROCESSING_URL_MOBILE, ValidateCodeType.SMS);
         addUrlToMap(securityProperties.getCode().getSms().getUrl(), ValidateCodeType.SMS);
     }
@@ -62,7 +72,9 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
                 validateCodeProcessorHolder.findValidateCodeProcessor(type).validate(new ServletWebRequest(request, response));
                 logger.info("验证码校验通过");
             } catch (ValidateCodeException exception) {
+                //校验失败就不走下面的流程
                 authenticationFailureHandler.onAuthenticationFailure(request, response, exception);
+                return;
             }
         }
         filterChain.doFilter(request, response);
@@ -70,9 +82,11 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
 
     private ValidateCodeType getValidateCodeType(HttpServletRequest request) {
         ValidateCodeType result = null;
+        //判断请求的方法是否为get
         if (!StringUtils.equalsIgnoreCase(request.getMethod(), "get")) {
             Set<String> urls = urlMap.keySet();
             for (String url : urls) {
+                //当请求验证码的路径与urlMap中的路径一致,获得验证码的类型(image or sms)
                 if (pathMatcher.match(url, request.getRequestURI())) {
                     result = urlMap.get(url);
                 }
